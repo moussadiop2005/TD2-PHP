@@ -10,7 +10,7 @@ session_start();
 </head>
 <body>
     <?php require 'Fonction.php'?>
-    <form method="post" action="index.php?Exercice_1=&page=1">
+    <form method="post" action="index.php?Exercice_1=&inferieur=1&superieur=1">
         <fieldset>
             <legend>Nombre premier</legend>
             <div>Saisir un nombre superieur à 10000</div>
@@ -30,30 +30,32 @@ session_start();
             echo 'Veuillez saisir un nombre superieur à 10000.<br/>';
         }
     }
-    if (isset($_GET['page'])) {
+    if (isset($_GET['inferieur'])||isset($_GET['superieur'])) {
         echo 'Tableau des nombres premiers inférieur à la moyènne';
-        pagination($_SESSION['Moy']['inferieur']);
+        pagination($_SESSION['Moy']['inferieur'],'inferieur');
         echo 'Tableau des nombres premiers supérieur à la moyènne';
-        pagination($_SESSION['Moy']['superieur']);
+        pagination($_SESSION['Moy']['superieur'],'superieur');
     }
-    function pagination (array $tab){
+    function pagination (array $tab , string $nomp_page){
         $_SESSION['tab']=$tab;
         $_SESSION['nb']=count($tab);
         $_SESSION['nb_page']=ceil($_SESSION['nb']/100);
         if (isset($_SESSION['tab'])) {
-            $page=$_GET['page'];
-            if ($page<0) {
-                $page=1;
-            }elseif ($page>$_SESSION['nb_page']) {
-                $page=$_SESSION['nb_page'];
+            if (isset($_GET[$nomp_page])) {
+                $_SESSION[$nomp_page]= $_GET[$nomp_page];
             }
-            if (empty($page)) {
+            if ($_SESSION[$nomp_page]<0) {
+                $_SESSION[$nomp_page]=1;
+            }elseif ($_SESSION[$nomp_page]>$_SESSION['nb_page']) {
+                $_SESSION[$nomp_page]=$_SESSION['nb_page'];
+            }
+            if (empty($_SESSION[$nomp_page])) {
                 $n=0;
             }else {
-                $n=($page-1)*100;
+                $n=($_SESSION[$nomp_page]-1)*100;
             }
-            
-            
+
+
             echo '';
             echo '<table>';
             for ($i=0; $i < 10; $i++) { 
@@ -68,23 +70,25 @@ session_start();
                         }
                     }
                 }
-                
+
                 echo '</tr>';
             }
             echo '</table>';
+            
+            echo '<div>';
+            if ($_SESSION[$nomp_page] > 1) {
+                echo '<form method="post" action="index.php?Exercice_1=&'.$nomp_page.'='.($_SESSION[$nomp_page]-1).'" class="pagination"><button type="submit" name="precedent">Précédent</button></form>';
+            }
+            
+            for ($i=1; $i <= $_SESSION['nb_page']; $i++) { 
+                echo'<a href="index.php?Exercice_1=&'.$nomp_page.'='.$i.'" class="pagination">'.$i.'</a>';
+            }
+            if ($_SESSION[$nomp_page] < $_SESSION['nb_page']) {
+                echo '<form method="post" action="index.php?Exercice_1=&'.$nomp_page.'='.($_SESSION[$nomp_page]+1).'" class="pagination"><button type="submit" name="suivant">Suivant</button></form>';
+            }
+            echo '</div>';
         }
-        echo '<div>';
-        if ($page > 1) {
-            echo '<form method="post" action="index.php?Exercice_1=&page='.($page-1).'" class="pagination"><button type="submit" name="precedent">Précédent</button></form>';
-        }
-        
-        for ($i=1; $i <= $_SESSION['nb_page']; $i++) { 
-            echo'<a href="index.php?Exercice_1=&page='.$i.'" class="pagination">'.$i.'</a>';
-        }
-        if ($page < $_SESSION['nb_page']) {
-            echo '<form method="post" action="index.php?Exercice_1=&page='.($page+1).'" class="pagination"><button type="submit" name="suivant">Suivant</button></form>';
-        }
-        echo '</div>';
+            
         
     }
 
