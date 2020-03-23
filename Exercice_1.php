@@ -54,8 +54,6 @@ session_start();
             }else {
                 $n=($_SESSION[$nomp_page]-1)*100;
             }
-
-
             echo '';
             echo '<table>';
             for ($i=0; $i < 10; $i++) { 
@@ -70,7 +68,6 @@ session_start();
                         }
                     }
                 }
-
                 echo '</tr>';
             }
             echo '</table>';
@@ -88,13 +85,7 @@ session_start();
             }
             echo '</div>';
         }
-            
-        
     }
-
-   
-
-    
     ?>
 </body>
 </html>
