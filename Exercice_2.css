@@ -1,0 +1,16 @@
+table{
+    border-collapse: collapse;
+    width: 40%;
+    background-color: rgb(185, 185, 185);
+}
+td{
+    border: 1px solid black;
+
+}
+.numero{
+    width: 7%;
+    text-align: center;
+}
+.mois{
+    width: 25%;
+}

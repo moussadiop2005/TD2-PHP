@@ -1,0 +1,17 @@
+table .div1{
+    width: 10%;
+    height: 25px;
+    border: 1px solid grey;
+    text-align: center;
+}
+table{
+    width: 80%;
+    border-collapse: collapse;
+}
+a{
+    display: inline-block;
+    width: 2%;
+}
+div .pagination{
+    display: inline-block;
+}

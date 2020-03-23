@@ -1,0 +1,32 @@
+body{
+    margin: 0px 0px;
+    padding: 0px 0px;
+}
+nav{
+    width: 97%;
+    
+}
+ul{
+    list-style-type: none;
+    background-color: blue;
+}
+nav > ul > li{
+    float: left;
+    width: 12.5%;
+    height: 56px;
+    top: -10px;
+    
+}
+nav ul li form button{
+    background-color: red;
+    color: white;
+    text-align: center;
+    padding: 20px 0px ;
+    margin-top: -16px;
+    width: 100%;
+    text-decoration: none;
+    border: 1px solid black;
+}
+div{
+    border: none;
+}
