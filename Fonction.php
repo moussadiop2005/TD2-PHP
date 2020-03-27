@@ -40,6 +40,7 @@ function Classement_Moyenne(array $Tab){
 }
 /*exercice 3 et exercice 4*/
 /*compteur*/
+/*compte le nombre de caractere d'une chaine*/
 function str_compteur(string $chaine){
     $x=0;
     while (isset($chaine[$x])) {
@@ -47,6 +48,7 @@ function str_compteur(string $chaine){
     }
     return $x;
 }
+/*compte le nombre d'element d'un tableau*/
 function table_compteur(array $chaine){
     $x=0;
     while (isset($chaine[$x])) {
@@ -55,25 +57,6 @@ function table_compteur(array $chaine){
     return $x;
 }
 /*recuperateur*/
-function recuperateur_mot(string $texte){
-    $n=str_compteur($texte);
-    for ($i=0; $i <$n ; $i++) { 
-        $Lettres[]=$texte[$i];
-    }
-    
-    $p=0;
-    $mot='';
-    for ($i=0; $i<=$n ; $i++) { 
-        if (@$Lettres[$i]==' ') {
-            $p=$p+1;
-            $mot='';
-        }else{
-            $mot=@"$mot".@"$Lettres[$i]";
-            $mots[$p]=$mot;
-        }
-    }
-    return $mots;
-}
 function recuperateur_phrase(string $texte){
     $n=str_compteur($texte);
     for ($i=0; $i <$n ; $i++) { 
@@ -94,6 +77,34 @@ function recuperateur_phrase(string $texte){
     return $phrases;
 }
 /*verificateur et correcteur*/
+/*verifie si une chaine est constituée de caractere alphabétique*/
+function verificateur_caractere (string $chaine){
+for ($i=0; $i < str_compteur($chaine); $i++) { 
+    if (($chaine[$i]>='a' && $chaine[$i]<='z')||($chaine[$i]>='A' && $chaine[$i]<='Z')) {
+        return true;
+    }
+}
+return false;
+}
+/*verifie si une chaine est un entier*/
+function verificateur_nbre ($nombre){
+    $chiffre=['0','1','2','3','4','5','6','7','8','9'];
+    $n=0;
+    for ($i=0; $i < str_compteur($nombre); $i++) { 
+        for ($j=0; $j <= 9; $j++) { 
+            if ($chiffre[$j]==$nombre[$i]) {
+                $n++;
+            break;
+            }
+        }
+    }
+    if ($n==str_compteur($nombre)) {
+        return true;
+    }else{
+        return false;
+    }
+    
+}
 function verificateur_long_phrase(string $texte){
     $n=0;
     $chaine=recuperateur_phrase($texte);
@@ -113,35 +124,27 @@ function verificateur_long_mot(array $mots){
     $n=0;
     for ($i=0; $i < table_compteur($mots); $i++) { 
         if (str_compteur($mots[$i])>20) {
-            $n=$n+1;
+            return false;
         }
     }
-    if ($n==0) {
-        $bool=true;
-    }else{
-        $bool=false;
-    }
-    return $bool;
+    return true;
 }
-function verificateur_mot_avec_m(string $mot){
-    $n=0;
-    for ($i=0; $i <=str_compteur($mot) ; $i++) { 
-        $Lettres[]=@$mot[$i];
-        if ($Lettres[$i]=='M'||$Lettres[$i]=='m') {
-            $n=$n+1;
+/*verifie si un mot la lettre M*/
+function verificateur_mot_avec_m($mot, $m, $M){
+        for ($i=0; $i <=str_compteur($mot) ; $i++) {
+            if (isset($mot[$i])) {
+                if ($mot[$i]==$M||$mot[$i]==$m) {
+                    return true;
+                } 
+            } 
         }
-        if ($n!=0) {
-            $bool=true;
-        }else{
-            $bool=false;
-        }  
-    }
-    return $bool;
+    return false;
 }
-function compteur_mot_avec_m(array $chaine){
+/*compte le nombre de mot avec la lettre M*/
+function compteur_mot_avec_m(array $chaine, $m, $M){
     $n=0;
     for ($i=0; $i < table_compteur($chaine); $i++) {
-        if (verificateur_mot_avec_m($chaine[$i])) {
+        if (verificateur_mot_avec_m($chaine[$i], $m, $M)) {
             $n=$n+1;
         }
     }
@@ -210,19 +213,12 @@ function verificateur_maj(string $texte){
     return $bool;
 }
 function verificateur_point(string $texte){
-    $n=0;
-    $n=str_compteur($texte);
-    for ($i=0; $i <$n ; $i++) { 
-        $Lettres[]=$texte[$i];
+    $nb=str_compteur($texte);
+    if ($texte[$nb-1]=='.') {
+        return true;
+    }else {
+        return false;
     }
-    for ($i=0; $i <$n ; $i++) { 
-        if (preg_match("#\.$#",$texte)) {
-            $bool=true;
-        }else {
-            $bool=false;
-        }
-    }
-    return $bool;
 }
 /*exercice 5*/
 function recuperateur_num(string $texte){
@@ -315,6 +311,15 @@ function verificateur_num_invalide (string $num){
         }
         return $bool;
     }
+}
+function verificateur_invalide (array $num){
+    $tab =classeur_num($num);
+    for ($i=0; $i < table_compteur($tab['invalide']); $i++) { 
+        if (isset($tab['invalide'][$i])) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /*mini projet*/
