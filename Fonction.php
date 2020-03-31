@@ -105,6 +105,23 @@ function verificateur_nbre ($nombre){
     }
     
 }
+/*Verifie si un caractere est miniscule */
+function is_lower($car){
+    return ($car>='a'&&$car<='z');
+}
+/*Verifie si un caractere est majiscule */
+function is_upper($car){
+    return ($car>='A'&&$car<='Z');
+}
+function is_Valide($chaine){  //  founction pour la valider u mots s'il contien que des lattre alphabetic
+    for ($i=0; $i < taille_chaine($chaine); $i++) { 
+        if ( (!is_lower($chaine[$i])) && (!is_upper($chaine[$i])) ) {
+            return false;
+        }
+    }
+    return true;
+}
+
 function verificateur_long_phrase(string $texte){
     $n=0;
     $chaine=recuperateur_phrase($texte);
