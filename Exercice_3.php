@@ -28,8 +28,10 @@
                     
                     $mots=[];
                     for ($i=1; $i <= $_POST['nb']; $i++) { 
-                        if (isset($_POST['mot'.$i])) {
+                        if (isset($_POST['mot'.$i])&&is_Valide($_POST['mot'.$i])) {
                             $mots[]=$_POST['mot'.$i];
+                        }else {
+                            echo "Le mot n°$i n'est pas valide";
                         }
                         
                     }
