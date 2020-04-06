@@ -57,25 +57,17 @@ function table_compteur(array $chaine){
     return $x;
 }
 /*recuperateur*/
+/*recuperrateur phrase et transforme le premier caractere en majuscul*/
 function recuperateur_phrase(string $texte){
-    $n=str_compteur($texte);
-    for ($i=0; $i <$n ; $i++) { 
-        $Lettres[]=$texte[$i];
+    preg_match_all('#[a-z]([^.!?]|[.][0-9])*[.?!]#i' ,$texte,$phrases);
+    $tabf=[];
+    for ($i=0; $i < count($phrases[0]); $i++) { 
+        $tabf[]=ucfirst($phrases[0][$i]);
     }
     
-    $p=0;
-    $phrase='';
-    for ($i=0; $i<$n ; $i++) { 
-        if (@$Lettres[$i]=='.') {
-            $p=$p+1;
-            $phrase='';
-        }else{
-            $phrase=@$phrase.@$Lettres[$i];
-            $phrases[$p]=$phrase.'.';
-        }
-    }
-    return $phrases;
+    return $tabf;
 }
+
 /*verificateur et correcteur*/
 /*verifie si une chaine est constituée de caractere alphabétique*/
 function verificateur_caractere (string $chaine){
@@ -121,21 +113,14 @@ function is_Valide($chaine){  //  founction pour la valider u mots s'il contien 
     }
     return true;
 }
-
-function verificateur_long_phrase(string $texte){
-    $n=0;
-    $chaine=recuperateur_phrase($texte);
-    for ($i=0; $i < table_compteur($chaine); $i++) { 
-        if (str_compteur($chaine[$i])>200) {
-            $n=$n+1;
-        }
+/*verifie si la phase contient au plus 200 caracteres*/
+function verificateur_longueur_phrase(string $texte){
+    if (strlen($texte)<=200) {
+        return true;
+    }else {
+        return false;
     }
-    if ($n==0) {
-        $bool=true;
-    }else{
-        $bool=false;
-    }
-    return $bool;
+    
 }
 function verificateur_long_mot(array $mots){
     $n=0;
@@ -167,6 +152,15 @@ function compteur_mot_avec_m(array $chaine, $m, $M){
     }
     return $n;
 }
+/*correcteur phrase*/
+function correcteur_espace($texte){
+    $correction_espace=preg_replace('#[ ]+#',' ',$texte);
+    $correction_apostrophe=preg_replace('#([ ]+\'|\'[ ])#','\'',$correction_espace);
+    $correction_virgule=preg_replace('#([ ]+,)#',',',$correction_apostrophe);
+    $correction_point_virgule=preg_replace('#([ ]+;)#',';',$correction_virgule);
+    $correction_point=preg_replace('#([ ]+\.)#','.',$correction_point_virgule);
+    return $correction_point;
+}
 function correcteur_phrase(string $texte){
     $n=str_compteur($texte);
     for ($i=0; $i <$n ; $i++) { 
@@ -194,44 +188,9 @@ function correcteur_phrase(string $texte){
     }
     return $phrase;
 }
-function verificateur_maj(string $texte){
-    $n=0;
-    $text=correcteur_phrase($texte);
-    $n=str_compteur($text);
-    for ($i=0; $i <$n ; $i++) { 
-        $Lettres[]=$text[$i];
-    }
-    
-    $p=0;
-    $phrase='';
-    for ($i=0; $i<$n ; $i++) { 
-        if (@$Lettres[$i]=='.') {
-            $p=$p+1;
-            $phrase='';
-            $Lettres[$i+1]='';
-        }else{
-            $phrase=@"$phrase".@"$Lettres[$i]";
-            $phrases[$p]="$phrase".'.';
-        }
-        
-    }
-    for ($i=0; $i < table_compteur($phrases) ; $i++) { 
-        if (preg_match("#^[A-Z]#", $phrases[$i])) {
-            $n=0;
-        }else{
-            $n=$n+1;
-        }
-    }
-    if ($n==0) {
-        $bool=true;
-    }else {
-        $bool=false;
-    }
-    return $bool;
-}
-function verificateur_point(string $texte){
-    $nb=str_compteur($texte);
-    if ($texte[$nb-1]=='.') {
+/*verifie si le texte contient au moin une phase*/
+function verificateur_texte(string $texte){
+    if (preg_match('#^[a-z].+[.?!]$#i', $texte)) {
         return true;
     }else {
         return false;
